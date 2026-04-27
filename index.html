@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="払い方">
+<title>払い方ガイド</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap');
+
+- { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+
+body {
+font-family: ‘Noto Sans JP’, sans-serif;
+background: #f2f2f7;
+color: #1c1c1e;
+min-height: 100dvh;
+}
+
+.header {
+background: #f2f2f7;
+padding: calc(env(safe-area-inset-top, 44px) + 8px) 16px 8px;
+position: sticky; top: 0; z-index: 10;
+}
+.header h1 { font-size: 28px; font-weight: 700; letter-spacing: -0.02em; margin-bottom: 10px; }
+
+.search-box {
+background: #fff; border-radius: 10px;
+display: flex; align-items: center; gap: 8px; padding: 9px 12px;
+}
+.search-box input {
+background: none; border: none; outline: none;
+font-family: ‘Noto Sans JP’, sans-serif; font-size: 15px; color: #1c1c1e; width: 100%;
+}
+.search-box input::placeholder { color: #8e8e93; }
+
+.tabs {
+display: flex; gap: 6px; padding: 10px 16px;
+overflow-x: auto; scrollbar-width: none; background: #f2f2f7;
+}
+.tabs::-webkit-scrollbar { display: none; }
+.tab {
+flex-shrink: 0; padding: 5px 14px; border-radius: 20px;
+font-size: 13px; font-weight: 500; cursor: pointer;
+background: #fff; color: #3a3a3c; border: none; transition: background 0.15s, color 0.15s;
+}
+.tab.active { background: #1c1c1e; color: #fff; }
+
+.list { padding: 0 16px calc(env(safe-area-inset-bottom,20px) + 80px); }
+
+.section-label {
+font-size: 12px; font-weight: 500; color: #8e8e93;
+padding: 14px 4px 6px; letter-spacing: 0.04em;
+}
+
+.card {
+background: #fff; display: flex; align-items: center;
+padding: 13px 14px; cursor: pointer; transition: opacity 0.12s;
+}
+.card:active { opacity: 0.6; }
+.store-emoji { font-size: 20px; width: 30px; flex-shrink: 0; }
+.card-mid { flex: 1; padding: 0 10px; }
+.store-name { font-size: 15px; font-weight: 500; }
+.pay-name { font-size: 12px; color: #8e8e93; margin-top: 2px; }
+.chevron { color: #c7c7cc; font-size: 16px; }
+
+.app-bar {
+position: fixed; bottom: 0; left: 0; right: 0;
+background: rgba(242,242,247,0.92);
+backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+border-top: 1px solid #d1d1d6;
+padding: 10px 16px calc(env(safe-area-inset-bottom,16px) + 4px);
+display: flex; gap: 8px;
+}
+.app-btn {
+flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px;
+padding: 8px 4px; border-radius: 12px; border: none; cursor: pointer;
+background: #fff; transition: opacity 0.12s, transform 0.12s;
+}
+.app-btn:active { opacity: 0.7; transform: scale(0.96); }
+.app-btn .dot {
+width: 36px; height: 36px; border-radius: 10px;
+display: flex; align-items: center; justify-content: center;
+font-size: 15px; font-weight: 700; color: #fff;
+}
+.app-btn .lbl { font-size: 10px; font-weight: 500; color: #3a3a3c; }
+
+/* モーダル */
+.overlay {
+display: none; position: fixed; inset: 0;
+background: rgba(0,0,0,0.4); z-index: 100; align-items: flex-end;
+}
+.overlay.open { display: flex; }
+.sheet {
+background: #f2f2f7; border-radius: 20px 20px 0 0; width: 100%;
+padding: 12px 0 calc(env(safe-area-inset-bottom,20px) + 16px);
+animation: up 0.26s cubic-bezier(0.32,0.72,0,1);
+max-height: 80dvh; overflow-y: auto;
+}
+@keyframes up { from { transform: translateY(100%); } to { transform: none; } }
+.sheet-handle {
+width: 36px; height: 4px; border-radius: 2px;
+background: #c7c7cc; margin: 0 auto 16px;
+}
+.sheet-title { font-size: 18px; font-weight: 700; padding: 0 20px 4px; }
+.sheet-cat { font-size: 13px; color: #8e8e93; padding: 0 20px 14px; }
+.sheet-note {
+margin: 0 16px 14px; background: #fff; border-radius: 12px;
+padding: 12px 14px; font-size: 13px; color: #3a3a3c; line-height: 1.7;
+}
+.pay-section-label { font-size: 12px; color: #8e8e93; font-weight: 500; padding: 0 20px 8px; }
+.pay-rows { margin: 0 16px 14px; background: #fff; border-radius: 12px; overflow: hidden; }
+.pay-row {
+display: flex; align-items: center; gap: 12px; padding: 13px 14px;
+}
+.pay-row + .pay-row { border-top: 1px solid #f2f2f7; }
+.rank { font-size: 13px; color: #8e8e93; width: 18px; text-align: center; flex-shrink: 0; }
+.rank.top { color: #ff9500; font-weight: 700; }
+.pay-info { flex: 1; }
+.pay-info-name { font-size: 14px; font-weight: 500; }
+.pay-info-rate { font-size: 12px; color: #8e8e93; margin-top: 1px; }
+.launch-btn {
+padding: 7px 14px; border-radius: 20px; border: none; cursor: pointer;
+font-family: ‘Noto Sans JP’, sans-serif; font-size: 13px; font-weight: 700;
+color: #fff; flex-shrink: 0; transition: opacity 0.12s;
+}
+.launch-btn:active { opacity: 0.7; }
+.close-btn {
+display: block; margin: 0 16px; width: calc(100% - 32px); padding: 14px;
+background: #fff; border: none; border-radius: 12px;
+font-family: ‘Noto Sans JP’, sans-serif; font-size: 15px; font-weight: 500;
+color: #007aff; cursor: pointer;
+}
+
+.loading { text-align: center; color: #8e8e93; font-size: 14px; padding: 48px 0; }
+.error   { text-align: center; color: #ff3b30; font-size: 14px; padding: 48px 16px; line-height: 1.6; }
+</style>
+
+</head>
+<body>
+
+<div class="header">
+  <h1>💳 払い方ガイド</h1>
+  <div class="search-box">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#8e8e93" stroke-width="2.5">
+      <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+    </svg>
+    <input type="search" id="searchInput" placeholder="お店を検索" oninput="filterCards()">
+  </div>
+</div>
+
+<div class="tabs" id="tabs">
+  <div class="tab active" onclick="setTab(this,'all')">すべて</div>
+</div>
+
+<div class="list" id="cardList">
+  <div class="loading">読み込み中...</div>
+</div>
+
+<div class="app-bar" id="appBar"></div>
+
+<div class="overlay" id="overlay" onclick="closeSheet(event)">
+  <div class="sheet">
+    <div class="sheet-handle"></div>
+    <div class="sheet-title" id="sName"></div>
+    <div class="sheet-cat"   id="sCat"></div>
+    <div class="sheet-note"  id="sNote"></div>
+    <div class="pay-section-label">おすすめ順</div>
+    <div class="pay-rows"    id="sRows"></div>
+    <button class="close-btn" onclick="closeSheet()">閉じる</button>
+  </div>
+</div>
+
+<script>
+// ============================
+// アプリ定義（stores.jsonとは別に管理）
+// key, label, urlスキーム, カラーを設定
+// ============================
+const APPS = {
+  rakuten: { label: '楽天ペイ',     url: 'rakutenpay://',         color: '#bf0000' },
+  aeon:    { label: 'イオンペイ',   url: 'aeonpay://',            color: '#00a0e9' },
+  vpoint:  { label: 'Vポイントペイ', url: 'smbcnikkovcardapp://', color: '#003087' },
+  paypay:  { label: 'PayPay',       url: 'paypay://',             color: '#ff0033' },
+};
+
+// アプリ起動
+function launch(key) {
+  const app = APPS[key];
+  if (app) window.location.href = app.url;
+}
+
+// ============================
+// データ読み込み
+// ============================
+let STORES = [];
+let currentTab = 'all';
+
+async function loadStores() {
+  try {
+    const res = await fetch('stores.json');
+    if (!res.ok) throw new Error('stores.json が見つかりません');
+    STORES = await res.json();
+    buildTabs();
+    buildAppBar();
+    renderCards(STORES);
+  } catch (e) {
+    document.getElementById('cardList').innerHTML =
+      `<div class="error">⚠️ データの読み込みに失敗しました。<br>index.html と同じフォルダに<br><b>stores.json</b> があるか確認してください。<br><br><small>${e.message}</small></div>`;
+  }
+}
+
+// ============================
+// タブ生成（catの種類を自動抽出）
+// ============================
+function buildTabs() {
+  const cats = ['all', ...new Set(STORES.map(s => s.cat))];
+  const tabsEl = document.getElementById('tabs');
+  tabsEl.innerHTML = cats.map((c, i) =>
+    `<div class="tab ${i===0?'active':''}" onclick="setTab(this,'${c}')">${c === 'all' ? 'すべて' : c}</div>`
+  ).join('');
+}
+
+// ============================
+// アプリバー生成（使われているkeyを自動抽出）
+// ============================
+function buildAppBar() {
+  const usedKeys = [...new Set(STORES.flatMap(s => s.payments.map(p => p.key)))];
+  const barEl = document.getElementById('appBar');
+  barEl.innerHTML = usedKeys.filter(k => APPS[k]).map(k => {
+    const app = APPS[k];
+    const initial = app.label.slice(0,2);
+    return `<button class="app-btn" onclick="launch('${k}')">
+      <div class="dot" style="background:${app.color}">${initial}</div>
+      <div class="lbl">${app.label}</div>
+    </button>`;
+  }).join('');
+}
+
+// ============================
+// カード描画
+// ============================
+function renderCards(list) {
+  const el = document.getElementById('cardList');
+  if (!list.length) {
+    el.innerHTML = '<div class="loading">見つかりません</div>';
+    return;
+  }
+  const grouped = {};
+  list.forEach(d => { if (!grouped[d.cat]) grouped[d.cat] = []; grouped[d.cat].push(d); });
+
+  el.innerHTML = Object.entries(grouped).map(([cat, items]) => `
+    <div class="section-label">${cat}</div>
+    <div style="border-radius:12px;overflow:hidden">
+      ${items.map((d, i) => {
+        const best = APPS[d.payments[0].key] || { label: d.payments[0].key, color: '#999' };
+        return `<div class="card" style="${i > 0 ? 'border-top:1px solid #f2f2f7' : ''}"
+                     onclick="openSheet(${STORES.indexOf(d)})">
+          <div class="store-emoji">${d.icon || '🏪'}</div>
+          <div class="card-mid">
+            <div class="store-name">${d.name}</div>
+            <div class="pay-name">${best.label}　${d.payments[0].rate}</div>
+          </div>
+          <div class="chevron">›</div>
+        </div>`;
+      }).join('')}
+    </div>
+  `).join('');
+}
+
+function filterCards() {
+  const q = document.getElementById('searchInput').value.toLowerCase();
+  let list = currentTab === 'all' ? STORES : STORES.filter(d => d.cat === currentTab);
+  if (q) list = list.filter(d => d.name.toLowerCase().includes(q));
+  renderCards(list);
+}
+
+function setTab(el, cat) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  currentTab = cat;
+  document.getElementById('searchInput').value = '';
+  filterCards();
+}
+
+function openSheet(i) {
+  const d = STORES[i];
+  document.getElementById('sName').textContent = (d.icon || '') + ' ' + d.name;
+  document.getElementById('sCat').textContent = d.cat;
+  document.getElementById('sNote').textContent = d.note || '';
+  document.getElementById('sRows').innerHTML = d.payments.map((p, idx) => {
+    const app = APPS[p.key] || { label: p.key, color: '#999' };
+    return `<div class="pay-row">
+      <div class="rank ${idx===0?'top':''}">${idx===0?'★':idx+1}</div>
+      <div class="pay-info">
+        <div class="pay-info-name">${app.label}</div>
+        <div class="pay-info-rate">${p.rate}｜${p.memo}</div>
+      </div>
+      <button class="launch-btn" style="background:${app.color}"
+              onclick="launch('${p.key}')">起動</button>
+    </div>`;
+  }).join('');
+  document.getElementById('overlay').classList.add('open');
+}
+
+function closeSheet(e) {
+  if (!e || e.target === document.getElementById('overlay'))
+    document.getElementById('overlay').classList.remove('open');
+}
+
+loadStores();
+</script>
+
+</body>
+</html>
