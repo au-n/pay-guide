@@ -1,0 +1,113 @@
+[
+  {
+    "name": "セブン‑イレブン",
+    "cat": "コンビニ",
+    "icon": "🏪",
+    "note": "楽天カードからチャージした楽天ペイが最大1.5%。PayPayカード利用時も同率。",
+    "payments": [
+      { "key": "rakuten", "rate": "最大1.5%", "memo": "楽天カードチャージ" },
+      { "key": "paypay",  "rate": "最大1.5%", "memo": "PayPayカード" }
+    ]
+  },
+  {
+    "name": "ファミリーマート",
+    "cat": "コンビニ",
+    "icon": "🏪",
+    "note": "楽天ペイかPayPayが主力。",
+    "payments": [
+      { "key": "rakuten", "rate": "最大1.5%", "memo": "楽天カードチャージ" },
+      { "key": "paypay",  "rate": "最大1.5%", "memo": "PayPayカード" }
+    ]
+  },
+  {
+    "name": "ローソン",
+    "cat": "コンビニ",
+    "icon": "🏪",
+    "note": "Vポイントカード提示＋Vポイントペイで二重取り狙い。楽天ペイも◎。",
+    "payments": [
+      { "key": "vpoint",  "rate": "最大2.0%", "memo": "カード提示+払い" },
+      { "key": "rakuten", "rate": "最大1.5%", "memo": "楽天カードチャージ" },
+      { "key": "paypay",  "rate": "最大1.5%", "memo": "PayPayカード" }
+    ]
+  },
+  {
+    "name": "イオン / イオンモール",
+    "cat": "スーパー",
+    "icon": "🛒",
+    "note": "イオンペイ（WAON）が最強。20日・30日は5%OFF。",
+    "payments": [
+      { "key": "aeon",   "rate": "常時2%+", "memo": "20日30日は5%OFF" },
+      { "key": "paypay", "rate": "1.5%",    "memo": "PayPayカード" }
+    ]
+  },
+  {
+    "name": "マックスバリュ",
+    "cat": "スーパー",
+    "icon": "🛒",
+    "note": "イオン系列。イオンペイ（WAON）が最優先。",
+    "payments": [
+      { "key": "aeon",    "rate": "常時2%+", "memo": "WAON利用" },
+      { "key": "rakuten", "rate": "1.5%",    "memo": "楽天カードチャージ" }
+    ]
+  },
+  {
+    "name": "ウエルシア",
+    "cat": "ドラッグ",
+    "icon": "💊",
+    "note": "木曜のウエル活が最強（Tポイント）。普段は楽天ペイかPayPayで。",
+    "payments": [
+      { "key": "rakuten", "rate": "最大1.5%", "memo": "楽天カードチャージ" },
+      { "key": "paypay",  "rate": "最大1.5%", "memo": "PayPayカード" }
+    ]
+  },
+  {
+    "name": "マツモトキヨシ",
+    "cat": "ドラッグ",
+    "icon": "💊",
+    "note": "マツキヨポイントカード提示＋楽天ペイで二重取り。",
+    "payments": [
+      { "key": "rakuten", "rate": "最大3.0%", "memo": "カード提示+楽天ペイ" },
+      { "key": "paypay",  "rate": "最大2.5%", "memo": "カード提示+PayPay" }
+    ]
+  },
+  {
+    "name": "マクドナルド",
+    "cat": "飲食",
+    "icon": "🍔",
+    "note": "アプリクーポン優先→支払いは楽天ペイかPayPay。",
+    "payments": [
+      { "key": "rakuten", "rate": "最大1.5%", "memo": "クーポン併用" },
+      { "key": "paypay",  "rate": "最大1.5%", "memo": "クーポン併用" }
+    ]
+  },
+  {
+    "name": "すき家",
+    "cat": "飲食",
+    "icon": "🍜",
+    "note": "PayPayか楽天ペイがスムーズ。",
+    "payments": [
+      { "key": "paypay",  "rate": "最大1.5%", "memo": "PayPayカード" },
+      { "key": "rakuten", "rate": "最大1.5%", "memo": "楽天カードチャージ" }
+    ]
+  },
+  {
+    "name": "楽天市場",
+    "cat": "EC",
+    "icon": "🛍️",
+    "note": "SPUで楽天ペイ+楽天カードが圧倒的に高還元。",
+    "payments": [
+      { "key": "rakuten", "rate": "3%〜", "memo": "SPUで倍率UP" },
+      { "key": "paypay",  "rate": "1.5%", "memo": "PayPayカード" }
+    ]
+  },
+  {
+    "name": "Amazon",
+    "cat": "EC",
+    "icon": "📦",
+    "note": "PayPayかVポイントペイが使えれば◎。要対応確認。",
+    "payments": [
+      { "key": "paypay", "rate": "最大1.5%", "memo": "PayPayカード" },
+      { "key": "vpoint", "rate": "最大1.0%", "memo": "要対応確認" }
+    ]
+  }
+]
